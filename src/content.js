@@ -24,7 +24,7 @@ function init() {
     const newControls = $(`
         <div class="custom-controls">
             <label class="label" for="speed-slider">Скорость</label>
-            <input type="range" min="0.5" max="4" value="1" class="slider" step="0.1" id="speed-slider">
+            <input type="range" min="0.5" max="6" value="1" class="slider" step="0.1" id="speed-slider">
             <span class="speed-indicator" id="speed-indicator">x1</span>
             
             <label class="label checkbox-label grid-row-2" for="skip-opening-checkbox">Пропускать опенинг</label>
@@ -49,7 +49,7 @@ function init() {
     const skipOpeningObserver = new MutationObserver((mutationsList, observer) => {
         for (const mutation of mutationsList) {
             if (!$(mutation.target).hasClass('vjs-hidden')) {
-                $(mutation.target).click();
+                $(mutation.target).trigger("click");
             }
         }
     });
@@ -57,7 +57,7 @@ function init() {
     const nextEpisodeObserver = new MutationObserver((mutationsList, observer) => {
         for (const mutation of mutationsList) {
             if (!$(mutation.target).hasClass('vjs-hidden')) {
-                $(mutation.target).click();
+                $(mutation.target).trigger("click");
             }
         }
     });
@@ -82,10 +82,12 @@ function init() {
     function setSkipOpening(value) {
         if (value) {
             skipOpeningLabel.addClass('active');
-            skipOpeningObserver.observe(skipOpeningButton.get(0), {
-                attributes: true,
-                attributeFilter: ['class']
-            });
+            if (skipOpeningButton.length > 0) {
+                skipOpeningObserver.observe(skipOpeningButton.get(0), {
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+            }
         } else {
             skipOpeningLabel.removeClass('active');
             skipOpeningObserver.disconnect();
@@ -96,10 +98,12 @@ function init() {
     function setAutoplay(value) {
         if (value) {
             autoplayLabel.addClass('active');
-            nextEpisodeObserver.observe(nextEpisodeButton.get(0), {
-                attributes: true,
-                attributeFilter: ['class']
-            });
+            if (nextEpisodeButton.length > 0) {
+                nextEpisodeObserver.observe(nextEpisodeButton.get(0), {
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+            }
         } else {
             autoplayLabel.removeClass('active');
             nextEpisodeObserver.disconnect();
